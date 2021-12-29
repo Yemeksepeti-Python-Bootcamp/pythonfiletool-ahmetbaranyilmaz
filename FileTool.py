@@ -28,3 +28,24 @@ class FileOperations:
             self.__deleteByKeyword(deleteKey)
         if by == 'index':
             self.__deleteByIndex(deleteKey)
+
+    def __getKeyword(self):
+        return input('Enter Keyword: ')
+
+    def __getIndexes(self):
+        return list(map(int, input('Enter Indexes : ').split()))
+
+    def menu(self):
+        print(f'Selected CSV: {self.path}')
+        print(f'Operations\n(1) Search\n(2) Delete', end=':')
+        selection = int(input())
+        if selection == 1:
+            for row in self.search(self.__getKeyword()):
+                print(row)
+        elif selection == 2:
+            print(f'By\n(1) Keyword\n(2) Index', end=':')
+            by = int(input())
+            if by == 1:
+                self.__deleteByKeyword(self.__getKeyword())
+            elif by == 2:
+                self.__deleteByIndex(self.__getIndexes())
