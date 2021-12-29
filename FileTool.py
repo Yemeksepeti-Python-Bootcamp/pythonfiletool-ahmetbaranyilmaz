@@ -55,7 +55,7 @@ class FileOperations:
         return input(f'Enter {word}Keyword: ')
 
     def __getIndexes(self):
-        return list(map(int, input('Enter Indexes : ').split())) # 2, 3, 4, 5
+        return list(map(int, input('Enter Indexes : ').split())) # 2 3 4 5 
 
     def menu(self):
         print(f'Selected CSV: {self.path}')
