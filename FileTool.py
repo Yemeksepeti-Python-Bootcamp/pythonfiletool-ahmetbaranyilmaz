@@ -29,6 +29,20 @@ class FileOperations:
         if by == 'index':
             self.__deleteByIndex(deleteKey)
 
+    def appendRow(self, row = '', delimeter = ','):
+        if row == '':
+            with open(self.path, 'r') as file:
+                header = file.readline()
+                keyList = header.replace('\n', '').split(delimeter)
+                row = ''
+                for i,key in enumerate(keyList):
+                    if i == len(keyList)-1:
+                        row += input(f'Enter {key}: ') + '\n'
+                    else: row += input(f'Enter {key}: ') + delimeter
+
+        with open(self.path, 'a') as file:
+            file.write(row)
+
     def update(self, oldKeyword, newKeyword):
         with open(self.path, 'r') as file:
             header = file.readline()
@@ -38,14 +52,14 @@ class FileOperations:
             file.writelines(data)
 
     def __getKeyword(self, word = ''):
-        return input(f'Enter {word} Keyword: ')
+        return input(f'Enter {word}Keyword: ')
 
     def __getIndexes(self):
         return list(map(int, input('Enter Indexes : ').split())) # 2, 3, 4, 5
 
     def menu(self):
         print(f'Selected CSV: {self.path}')
-        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(0) Exit ', end=':')
+        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(4) Add Row\n(0) Exit ', end=':')
         selection = int(input())
         if selection == 1:
             for row in self.search(self.__getKeyword()):
@@ -58,6 +72,8 @@ class FileOperations:
             elif by == 2:
                 self.__deleteByIndex(self.__getIndexes())
         elif selection == 3:
-            self.update(self.__getKeyword('Old'), self.__getKeyword('New'))
+            self.update(self.__getKeyword('Old '), self.__getKeyword('New '))
+        elif selection == 4:
+            self.appendRow()
         elif selection == 0:
             pass
