@@ -3,11 +3,11 @@ class FileOperations:
         self.path = path
         self.fields = fields
 
-    def search(self, keyword): # keyword = fileOps.search('keyword')
+    def search(self, keyword): # keyword = fileOps.search(keyword)
         with open(self.path, 'r') as file:
             return [(i+1, r.replace('\n', '')) for i,r in enumerate(file.readlines()[1:]) if keyword.lower() in r.lower()]
 
-    def __deleteByKeyword(self, deleteKey): # fileOps.delete('sport')
+    def __deleteByKeyword(self, deleteKey): # fileOps.delete(keyword)
         with open(self.path, 'r') as file:
             header = file.readline()
             data = [row for row in file.readlines() if deleteKey.lower() not in row.lower()]
@@ -29,15 +29,23 @@ class FileOperations:
         if by == 'index':
             self.__deleteByIndex(deleteKey)
 
-    def __getKeyword(self):
-        return input('Enter Keyword: ')
+    def update(self, oldKeyword, newKeyword):
+        with open(self.path, 'r') as file:
+            header = file.readline()
+            data = [row.replace(oldKeyword, newKeyword) for row in file.readlines()]
+        with open(self.path, 'w') as file:
+            file.write(header)
+            file.writelines(data)
+
+    def __getKeyword(self, word = ''):
+        return input(f'Enter {word} Keyword: ')
 
     def __getIndexes(self):
-        return list(map(int, input('Enter Indexes : ').split()))
+        return list(map(int, input('Enter Indexes : ').split())) # 2, 3, 4, 5
 
     def menu(self):
         print(f'Selected CSV: {self.path}')
-        print(f'Operations\n(1) Search\n(2) Delete', end=':')
+        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update', end=':')
         selection = int(input())
         if selection == 1:
             for row in self.search(self.__getKeyword()):
@@ -49,3 +57,5 @@ class FileOperations:
                 self.__deleteByKeyword(self.__getKeyword())
             elif by == 2:
                 self.__deleteByIndex(self.__getIndexes())
+        elif selection == 3:
+            self.update(self.__getKeyword('Old'), self.__getKeyword('New'))
