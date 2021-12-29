@@ -45,7 +45,7 @@ class FileOperations:
 
     def menu(self):
         print(f'Selected CSV: {self.path}')
-        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update', end=':')
+        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(0) Exit ', end=':')
         selection = int(input())
         if selection == 1:
             for row in self.search(self.__getKeyword()):
@@ -59,3 +59,5 @@ class FileOperations:
                 self.__deleteByIndex(self.__getIndexes())
         elif selection == 3:
             self.update(self.__getKeyword('Old'), self.__getKeyword('New'))
+        elif selection == 0:
+            pass
