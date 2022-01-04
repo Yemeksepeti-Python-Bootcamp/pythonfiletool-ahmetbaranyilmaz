@@ -1,3 +1,6 @@
+import json
+import csv
+
 class FileOperations:
     def __init__(self, path, fields, *args, **kwargs):
         self.path = path
@@ -57,9 +60,25 @@ class FileOperations:
     def __getIndexes(self):
         return list(map(int, input('Enter Indexes : ').split())) # 2 3 4 5 
 
+    def showRowJson(self, indexes, delimeter=','):
+        with open(self.path, 'r') as file:
+            header = file.readline()
+            keyList = header.replace('\n', '').split(delimeter)
+            data = list(csv.reader(file, delimiter=',', quotechar='"'))
+
+            rowList = []
+            for index in indexes:
+                row = {}
+                for i, column in enumerate(data[index]):
+                    row[keyList[i]] = column
+
+                rowList.append(row)
+
+            print(json.dumps(rowList, indent=2))
+
     def menu(self):
         print(f'Selected CSV: {self.path}')
-        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(4) Add Row\n(0) Exit ', end=':')
+        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(4) Add Row\n(5) Show Row Like Json\n(0) Exit ', end=':')
         selection = int(input())
         if selection == 1:
             for row in self.search(self.__getKeyword()):
@@ -75,5 +94,7 @@ class FileOperations:
             self.update(self.__getKeyword('Old '), self.__getKeyword('New '))
         elif selection == 4:
             self.appendRow()
+        elif selection == 5:
+            self.showRowJson(self.__getIndexes())
         elif selection == 0:
             pass
