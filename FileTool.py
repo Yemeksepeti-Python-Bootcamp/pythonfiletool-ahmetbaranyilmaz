@@ -7,10 +7,16 @@ class FileOperations:
         self.fields = fields
 
     def search(self, keyword): # keyword = fileOps.search(keyword)
+        """
+        This function for searching on csv file by keyword
+        """
         with open(self.path, 'r') as file:
             return [(i+1, r.replace('\n', '')) for i,r in enumerate(file.readlines()[1:]) if keyword.lower() in r.lower()]
 
     def __deleteByKeyword(self, deleteKey): # fileOps.delete(keyword)
+        """
+        deletes row by keyword. Can delete multiple rows
+        """
         with open(self.path, 'r') as file:
             header = file.readline()
             data = [row for row in file.readlines() if deleteKey.lower() not in row.lower()]
@@ -19,6 +25,9 @@ class FileOperations:
             file.writelines(data)
 
     def __deleteByIndex(self, deleteKey): # fileOps.delete([5,7,9,10,11,22,2,3,4], by='index')
+        """
+        deletes row by index. Can delete multiple indexes
+        """
         with open(self.path, 'r') as file:
             header = file.readline()
             data = [row for i, row in enumerate(file.readlines()) if i not in deleteKey]
@@ -27,12 +36,18 @@ class FileOperations:
             file.writelines(data)
 
     def delete(self, deleteKey, by='keyword'):
+        """
+        used for call deleteBy functions.
+        """
         if by == 'keyword':
             self.__deleteByKeyword(deleteKey)
         if by == 'index':
             self.__deleteByIndex(deleteKey)
 
     def appendRow(self, row = '', delimeter = ','):
+        """
+        Adding row to csv file
+        """
         if row == '':
             with open(self.path, 'r') as file:
                 header = file.readline()
@@ -47,6 +62,9 @@ class FileOperations:
             file.write(row)
 
     def update(self, oldKeyword, newKeyword):
+        """
+        Updating csv file by words
+        """
         with open(self.path, 'r') as file:
             header = file.readline()
             data = [row.replace(oldKeyword, newKeyword) for row in file.readlines()]
@@ -61,6 +79,9 @@ class FileOperations:
         return list(map(int, input('Enter Indexes : ').split())) # 2 3 4 5 
 
     def showRowJson(self, indexes, delimeter=','):
+        """
+        Show csv row like Json 
+        """
         with open(self.path, 'r') as file:
             header = file.readline()
             keyList = header.replace('\n', '').split(delimeter)
@@ -77,6 +98,9 @@ class FileOperations:
             print(json.dumps(rowList, indent=2))
 
     def menu(self):
+        """
+        Call menu 
+        """
         print(f'Selected CSV: {self.path}')
         print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(4) Add Row\n(5) Show Row Like Json\n(0) Exit ', end=':')
         selection = int(input())
