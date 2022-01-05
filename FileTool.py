@@ -99,7 +99,7 @@ class FileOperations:
 
     def menu(self):
         """
-        Call menu 
+        Terminal menu for file operations
         """
         print(f'Selected CSV: {self.path}')
         print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(4) Add Row\n(5) Show Row Like Json\n(0) Exit ', end=':')
