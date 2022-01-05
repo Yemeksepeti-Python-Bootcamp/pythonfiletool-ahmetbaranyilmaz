@@ -2,7 +2,7 @@ import json
 import csv
 
 class FileOperations:
-    def __init__(self, path, fields, *args, **kwargs):
+    def __init__(self, path, fields='', *args, **kwargs):
         self.path = path
         self.fields = fields
 
@@ -80,7 +80,7 @@ class FileOperations:
 
     def showRowJson(self, indexes, delimeter=','):
         """
-        Show csv row like Json 
+        Show csv line like Json 
         """
         with open(self.path, 'r') as file:
             header = file.readline()
@@ -97,12 +97,21 @@ class FileOperations:
 
             print(json.dumps(rowList, indent=2))
 
+    def mergeCsv(self, newPath):
+        """
+        Merges main csv with other csv
+        """
+        with open(self.path, 'a') as file:
+            with open(newPath, 'r') as newFile:
+                newFile.readline()
+                file.writelines([line for line in newFile.readlines()])
+                
     def menu(self):
         """
         Terminal menu for file operations
         """
         print(f'Selected CSV: {self.path}')
-        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(4) Add Row\n(5) Show Row Like Json\n(0) Exit ', end=':')
+        print(f'Operations\n(1) Search\n(2) Delete\n(3) Update\n(4) Add Row\n(5) Show Row Like Json\n(6) Merge CSV\n(0) Exit ', end=':')
         selection = int(input())
         if selection == 1:
             for row in self.search(self.__getKeyword()):
@@ -120,5 +129,7 @@ class FileOperations:
             self.appendRow()
         elif selection == 5:
             self.showRowJson(self.__getIndexes())
+        elif selection == 6:
+            self.mergeCsv(input('Enter path: '))
         elif selection == 0:
             pass
